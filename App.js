@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AccountScreen from './src/screens/AccountScreen'
+import SignupScreen from './src/screens/SignupScreen'
+import SigninScreen from './src/screens/SigninScreen'
+import TrackDetailScreen from './src/screens/TrackDetailScreen'
+import TrackCreateScreen from './src/screens/TrackCreateScreen'
+import TrackListScreen from './src/screens/TrackListScreen'
 
-export default function App() {
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+      {isLoggedIn ? (
+          <>
+          <Tab.Navigator>
+            <Tab.Screen name="CreateTrack" component={TrackCreateScreen} />
+            <Tab.Screen name="Account" component={AccountScreen} />
+            <Stack.Navigator>
+              <Stack.Screen name="TrackList" component={TrackListScreen} />
+              <Stack.Screen name="TrackDetail" component={TrackDetailScreen} />
+            </Stack.Navigator>
+          </Tab.Navigator>
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="SignIn" component={SigninScreen} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
