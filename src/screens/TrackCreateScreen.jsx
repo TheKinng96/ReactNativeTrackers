@@ -5,6 +5,8 @@ const TrackCreateScreen = () =>  {
   return <Text style={{ fontSize:48 }}> TrackCreateScreen</Text>
 }
 
-const style = StyleSheet.create({})
+const style = StyleSheet.create({
+  
+})
 
 export default TrackCreateScreen;

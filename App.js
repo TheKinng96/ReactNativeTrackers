@@ -8,7 +8,7 @@ import SigninScreen from './src/screens/SigninScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
-import { AuthContext } from './src/context/context'
+import {Provider as AuthProvider} from './src/context/AuthContext'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,9 +49,10 @@ export default () => {
         setUserToken(null)
       }
     }
-  },[])
+  }, [])
+  
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthProvider>
       <NavigationContainer>
       {
         userToken ? (
@@ -62,12 +63,12 @@ export default () => {
           </Tab.Navigator>
         ): (
             <Stack.Navigator>
-              <Stack.Screen name="Signup" component={SignupScreen} options={{ title: 'Sign Up' }} />
+              <Stack.Screen name="SignUp" component={SignupScreen} options={{ title: 'Sign Up' }} />
               <Stack.Screen name="SignIn" component={SigninScreen} options={{ title: 'Sign In' }} />
             </Stack.Navigator>
       )}
       </NavigationContainer>
-    </AuthContext.Provider>
+    </AuthProvider>
 
   )
 };

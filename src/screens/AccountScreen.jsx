@@ -1,8 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, Button } from 'react-native'
+import { AuthContext } from '../context/context';
 
-const AccountScreen = () =>  {
-  return <Text style={{ fontSize:48 }}> AccountScreen</Text>
+const AccountScreen = () => {
+  const {signOut} = React.useContext(AuthContext)
+
+  return <>
+    <Text style={{ fontSize: 48 }}> AccountScreen</Text>
+    <Button title="Sign Out" onPress={() => signOut()}/>
+  </>
 }
 
 const style = StyleSheet.create({})
