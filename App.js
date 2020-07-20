@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,7 +8,9 @@ import SigninScreen from './src/screens/SigninScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
-import {Provider as AuthProvider} from './src/context/AuthContext'
+import { Provider as AuthProvider } from './src/context/AuthContext'
+import { setNavigator } from './src/navigationRef';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,37 +38,24 @@ const AccountScreenStack = () => (
 )
 
 export default () => {
-  const  [ userToken, setUserToken ] = React.useState(null)
-  const authContext = React.useMemo(() => {
-    return {
-      signIn: () => {
-        setUserToken('asdf')
-      },
-      signUp: () => {
-        setUserToken('asdf')
-      },
-      signOut: () => {
-        setUserToken(null)
-      }
-    }
-  }, [])
   
   return (
     <AuthProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={(navigator)=> {setNavigator(navigator)}}>
       {
-        userToken ? (
+        AsyncStorage.getItem('token') ? (
           <Tab.Navigator>
             <Tab.Screen name="Track" component={TrackScreenStack} />
             <Tab.Screen name="AccountPage" component={AccountScreenStack} />
             <Tab.Screen name="CreateTrack" component={TrackCreateStack} />
           </Tab.Navigator>
         ): (
-            <Stack.Navigator>
-              <Stack.Screen name="SignUp" component={SignupScreen} options={{ title: 'Sign Up' }} />
-              <Stack.Screen name="SignIn" component={SigninScreen} options={{ title: 'Sign In' }} />
-            </Stack.Navigator>
-      )}
+          <Stack.Navigator options={{ headerShown: false }}>
+            <Stack.Screen name="SignUp" component={SignupScreen} options={{ title: 'Sign Up' }} />
+            <Stack.Screen name="SignIn" component={SigninScreen} options={{ title: 'Sign In' }} />
+          </Stack.Navigator>
+          )
+      }
       </NavigationContainer>
     </AuthProvider>
 
